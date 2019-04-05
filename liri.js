@@ -13,6 +13,11 @@ const spotify = new Spotify(keys.spotify);
 var Args = process.argv;
 var searchStr = '';
 
+const concert = {
+  resultNum: 0,
+  askedNum: 0
+};
+
 for (var i = 3; i < Args.length; i++) {
   if (i > 3 && i < Args.length) {
     searchStr = `${searchStr} ${Args[i]}`;
@@ -23,7 +28,11 @@ for (var i = 3; i < Args.length; i++) {
 //a template for the logger to use
 var logLine = `${moment().format(
   'MMMM Do YYYY, h:mm:ss a'
-)}: User searched for ${searchStr}`;
+)}: User searched for ${searchStr}\n ${
+  Args[2] == 'concert-this'
+    ? `Received ${concert.resultNum} results, chose ${concert.askedNum}`
+    : ``
+}`;
 
 //are we supposed to just log the commands or use a middleware like morgan?
 const logger = fs.appendFile('log.txt', logLine, err => {
@@ -36,8 +45,9 @@ function delay(msg, time) {
     console.log(msg);
   }, time);
 }
-//S.A.M does it's computing here
+//S.A.M does it's computing here for concert-this
 function concertSAM(info) {
+  concert.resultNum = info.length;
   console.log(
     `Hi! My name is S.A.M (Super Automated Machine) and I'll be helping you today.`
   );
@@ -52,6 +62,7 @@ function concertSAM(info) {
   //uses process.stdin to take input from users and play with it
   stdin.on('data', chunk => {
     var input = chunk.trim();
+    concert.resultNum = input;
     if (input <= info.length) {
       for (i = 0; i < input; i++) {
         console.log(`
@@ -69,8 +80,8 @@ function concertSAM(info) {
       console.log(`S.A.M: There are only ${info.length} choices..`);
     }
     process.exit();
+    logger;
   });
-  logger;
 }
 
 //concert-this' brings data from API and passes to S.A.M.
@@ -87,6 +98,15 @@ function concertThis(artist) {
     });
 }
 
+function movieThis(movie) {
+  let qURL = `https://www.omdbapi.com/?t=${movie}&apikey=trilogy&plot=full&r=json`;
+
+  axios.get(qURL).then(res => {
+    let info = res.data;
+    console.log(info);
+  });
+}
+
 //decides where to direct S.A.M.
 switch (Args[2]) {
   case 'concert-this':
@@ -95,6 +115,7 @@ switch (Args[2]) {
   case 'spotify-this-song':
     break;
   case 'movie-this':
+    movieThis(searchStr);
     break;
   case 'do-what-it-says':
     break;
