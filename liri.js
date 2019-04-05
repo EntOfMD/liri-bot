@@ -30,7 +30,13 @@ function concertSAM(info) {
         `Hi! My name is S.A.M (Super Automated Machine) and I'll be helping you today.`
     );
     delay(
-        `There are ${info.length} results. How many would you like to see?`,
+        `${
+            info.length == 1
+                ? `There is only ${info.length} result.`
+                : `There are ${
+                      info.length
+                  } results. How many would you like to see?`
+        }`,
         800
     );
     stdin.on('data', chunk => {
