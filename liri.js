@@ -1,6 +1,8 @@
 require('dotenv').config();
+const stdin = process.stdin;
+stdin.setEncoding('utf-8');
 
-var Spotify = require('node-spotify-api');
+const Spotify = require('node-spotify-api');
 const axios = require('axios');
 const moment = require('moment');
 
@@ -17,14 +19,51 @@ for (var i = 3; i < Args.length; i++) {
         searchStr += Args[i];
     }
 }
-console.log(Args);
-console.log(searchStr);
+
+function delay(msg, time) {
+    setTimeout(() => {
+        console.log(msg);
+    }, time);
+}
+function concertSAM(info) {
+    console.log(
+        `Hi! My name is S.A.M (Super Automated Machine) and I'll be helping you today.`
+    );
+    delay(
+        `There are ${info.length} results. How many would you like to see?`,
+        800
+    );
+    stdin.on('data', chunk => {
+        var input = chunk.trim();
+        if (input < info.length) {
+            for (i = 0; i < input; i++) {
+                console.log(`
+                            Result #${i + 1}
+                            +-+-+-+-+`);
+                console.log(
+                    `S.A.M: Venue name is ${info[i].venue.name}. It'll be in ${
+                        info[i].venue.city
+                    }, ${
+                        info[i].venue.region
+                    }. The event is going to be on ${moment(
+                        info[i].datetime
+                    ).format('L')}`
+                );
+            }
+        } else {
+            console.log(`S.A.M: There are only ${info.length} choices..`);
+        }
+        process.exit();
+    });
+}
+
 function concertThis(artist) {
     let qURL = `https://rest.bandsintown.com/artists/${artist}/events?app_id=codingbootcamp`;
     axios
         .get(qURL)
         .then(res => {
-            console.log(res.data);
+            let info = res.data;
+            concertSAM(info);
         })
         .catch(err => {
             throw err;
