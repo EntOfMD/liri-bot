@@ -35,7 +35,7 @@ function concertSAM(info) {
     );
     stdin.on('data', chunk => {
         var input = chunk.trim();
-        if (input < info.length) {
+        if (input <= info.length) {
             for (i = 0; i < input; i++) {
                 console.log(`
                             Result #${i + 1}
