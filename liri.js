@@ -109,6 +109,18 @@ function movieSAM(info) {
     }, 800);
 }
 
+function spotifySAM(info) {
+    console.log(
+        `Hi! My name is S.A.M (Super Automated Machine) and I'll be helping you today.`
+    );
+    console.log(JSON.stringify(info.tracks.items[0].album.artists[0], null, 2));
+
+    // console.log(`
+    // S.A.M:
+    // I found ${info.tracks.items[0].album.artists[0].name}
+    // `)
+}
+
 //concert-this' brings data from API and passes to S.A.M.
 function concertThis(artist) {
     let qURL = `https://rest.bandsintown.com/artists/${artist}/events?app_id=codingbootcamp`;
@@ -135,12 +147,28 @@ function movieThis(movie) {
     });
 }
 
+function spotifyThis(song) {
+    spotify
+        .search({
+            type: 'track',
+            query: song,
+            limit: 1
+        })
+        .then(res => {
+            spotifySAM(res);
+        })
+        .catch(err => {
+            throw err;
+        });
+}
+
 //decides where to direct S.A.M.
 switch (Args[2]) {
     case 'concert-this':
         concertThis(searchStr);
         break;
     case 'spotify-this-song':
+        spotifyThis(searchStr);
         break;
     case 'movie-this':
         if (Args[3]) {
