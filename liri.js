@@ -1,6 +1,6 @@
-require('dotenv').config();
-const stdin = process.stdin; //this is to get user input
-stdin.setEncoding('utf-8'); //this sets user input to utf-8
+require('dotenv').config(); //this is for .env file
+const stdin = process.stdin; //this is to get user input OPTIONAL
+stdin.setEncoding('utf-8'); //this sets user input to utf-8 OPTIONAL
 
 const Spotify = require('node-spotify-api');
 const axios = require('axios');
@@ -10,9 +10,10 @@ const fs = require('fs');
 const keys = require('./config/keys');
 const spotify = new Spotify(keys.spotify);
 
-var Args = process.argv;
-var searchStr = '';
+var Args = process.argv; //this is to access the arguments passed down from the console
+var searchStr = ''; //this is what the user searched for
 
+//this grabs everything after 'node fileName'. ex: 'node filename this song has space' it'll store 'this song has space'
 for (var i = 3; i < Args.length; i++) {
   if (i > 3 && i < Args.length) {
     searchStr = `${searchStr} ${Args[i]}`;
@@ -21,13 +22,24 @@ for (var i = 3; i < Args.length; i++) {
   }
 }
 //a template for the logger to use
-var logLine = `${moment().format('MMMM Do YYYY, h:mm:ss a')}: User used ${
-  Args[2]
-} for ${searchStr}\n`;
+var logLine;
+if (
+  Args[2] === 'concert-this' ||
+  Args[2] === 'spotify-this-song' ||
+  Args[2] === 'movie-this' ||
+  Args[2] === 'do-what-it-says'
+) {
+  logLine = `${moment().format('MMMM Do YYYY, h:mm:ss a')}: User used ${
+    Args[2]
+  } to search ${searchStr == '' ? 'default search parameters' : searchStr}\n`;
+} else {
+  logLine = `${moment().format(
+    'MMMM Do YYYY, h:mm:ss a'
+  )}: User did not enter a valid command.\n`;
+}
 
 //are we supposed to just log the commands or use a middleware like morgan?
-
-const logger = fs.appendFile('log.txt', logLine, err => {
+fs.appendFile('log.txt', logLine, err => {
   if (err) throw err;
 });
 
@@ -71,8 +83,6 @@ function concertSAM(info) {
       console.log(`S.A.M: There are only ${info.length} choices..`);
     }
     process.exit();
-
-    logger;
   });
 }
 
@@ -98,10 +108,6 @@ function movieSAM(info) {
 }
 
 function spotifySAM(info) {
-  if (Args['-all']) {
-    console.log(info.tracks.items);
-  }
-
   console.log(
     `\nHi! My name is S.A.M (Super Automated Machine) and I'll be helping you today.`
   );
