@@ -178,4 +178,9 @@ switch (Args[2]) {
     break;
   case 'do-what-it-says':
     break;
+  default:
+    console.log(
+      `Not a valid option. Try again with 'concert-this', 'spotify-this-song','movie-this', or 'do-what-it-says'!`
+    );
+    break;
 }
