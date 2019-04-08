@@ -123,6 +123,30 @@ function spotifySAM(info) {
   `);
 }
 
+function lil_biach() {
+  fs.readFile('random.txt', 'utf8', (err, string) => {
+    if (err) throw err;
+
+    let stringArr = string.split(',');
+    let command = stringArr[0];
+    let search = stringArr[1];
+
+    switch (command) {
+      case 'concert-this':
+        concertThis(search);
+        break;
+      case 'spotify-this-song':
+        spotifyThis(search);
+        break;
+      case 'movie-this':
+        movieThis(search);
+        break;
+      default:
+        console.log(`S.A.M: CAN'T READ A COMMAND`);
+        break;
+    }
+  });
+}
 //concert-this' brings data from API and passes to S.A.M.
 function concertThis(artist) {
   let qURL = `https://rest.bandsintown.com/artists/${artist}/events?app_id=codingbootcamp`;
@@ -183,6 +207,7 @@ switch (Args[2]) {
     }
     break;
   case 'do-what-it-says':
+    lil_biach();
     break;
   default:
     console.log(
