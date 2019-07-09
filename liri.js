@@ -57,33 +57,49 @@ function concertSAM(info) {
   delay(
     `${
       info.length == 1
-        ? `There is only ${info.length} result.`
+        ? ''
         : `There are ${info.length} results. How many would you like to see?`
     }`,
-    800
+    200
   );
-  //uses process.stdin to take input from users and play with it
-  stdin.on('data', chunk => {
-    var input = chunk.trim();
 
-    if (input <= info.length) {
-      for (i = 0; i < input; i++) {
-        console.log(`
+  if (info.length > 1) {
+    //uses process.stdin to take input from users and play with it
+    stdin.on('data', chunk => {
+      var input = chunk.trim();
+
+      if (input <= info.length) {
+        for (i = 0; i < input; i++) {
+          console.log(`
                             Result #${i + 1}
                             +-+-+-+-+`);
-        console.log(
-          `S.A.M: Venue name is ${info[i].venue.name}. It'll be in ${
-            info[i].venue.city
-          }, ${info[i].venue.region}. The event is going to be on ${moment(
-            info[i].datetime
-          ).format('L')}`
-        );
+          console.log(
+            `S.A.M: Venue name is ${info[i].venue.name}. It'll be in ${
+              info[i].venue.city
+            }, ${info[i].venue.region}. The event is going to be on ${moment(
+              info[i].datetime
+            ).format('L')}`
+          );
+        }
+      } else {
+        console.log(`S.A.M: There are only ${info.length} choices..`);
       }
-    } else {
-      console.log(`S.A.M: There are only ${info.length} choices..`);
+      process.exit();
+    });
+  } else {
+    for (i = 0; i < info.length; i++) {
+      console.log(`
+                        Result #${i + 1}
+                        +-+-+-+-+`);
+      console.log(
+        `S.A.M: Venue name is ${info[i].venue.name}. It'll be in ${
+          info[i].venue.city
+        }, ${info[i].venue.region}. The event is going to be on ${moment(
+          info[i].datetime
+        ).format('L')}`
+      );
     }
-    process.exit();
-  });
+  }
 }
 
 function movieSAM(info) {
@@ -104,7 +120,7 @@ function movieSAM(info) {
       info.Plot
     } The movie has many great actors and actresses, such as ${info.Actors}.
         `);
-  }, 800);
+  }, 200);
 }
 
 function spotifySAM(info) {
