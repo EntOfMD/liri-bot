@@ -220,7 +220,12 @@ function displayHelp() {
 //decides where to direct S.A.M.
 switch (Args[2]) {
   case 'concert-this':
-    concertThis(searchStr);
+    if (Args[3]) {
+      concertThis(searchStr);
+    } else {
+      console.warn('No band was specified, searching for Rise Against');
+      concertThis('Rise Against');
+    }
     break;
   case 'spotify-this-song':
     if (Args[3]) {
