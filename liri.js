@@ -226,14 +226,14 @@ switch (Args[2]) {
     if (Args[3]) {
       spotifyThis(searchStr);
     } else {
-      spotifyThis('The Sign');
+      spotifyThis('Voodoo');
     }
     break;
   case 'movie-this':
     if (Args[3]) {
       movieThis(searchStr);
     } else {
-      movieThis('Mr. Nobody');
+      movieThis('Trainspotting');
     }
     break;
   case 'do-what-it-says':
@@ -244,7 +244,7 @@ switch (Args[2]) {
     break;
   default:
     console.log(
-      `Not a valid option. Try again with 'concert-this', 'spotify-this-song','movie-this', or 'do-what-it-says'! or 'node liri help'`
+      `Not a valid option. Try again with 'concert-this', 'spotify-this-song','movie-this', or 'do-what-it-says'! or 'help'`
     );
     break;
 }
