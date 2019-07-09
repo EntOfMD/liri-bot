@@ -32,6 +32,10 @@ if (
   logLine = `${moment().format('MMMM Do YYYY, h:mm:ss a')}: User used ${
     Args[2]
   } to search ${searchStr == '' ? 'default search parameters' : searchStr}\n`;
+} else if (Args[2] === 'help') {
+  logLine = `${moment().format('MMMM Do YYYY, h:mm:ss a')}: User used ${
+    Args[2]
+  } to look for commands\n`;
 } else {
   logLine = `${moment().format(
     'MMMM Do YYYY, h:mm:ss a'
@@ -203,6 +207,16 @@ function spotifyThis(song) {
     });
 }
 
+function displayHelp() {
+  console.log(`
+  Available commands:
+  * concert-this      | artist name
+  * movie-this        | movie name 
+  * spotify-this-song | song name
+  * do-what-it-says   | does what the file 'random.txt' says
+  `);
+}
+
 //decides where to direct S.A.M.
 switch (Args[2]) {
   case 'concert-this':
@@ -225,9 +239,12 @@ switch (Args[2]) {
   case 'do-what-it-says':
     lil_biach();
     break;
+  case 'help':
+    displayHelp();
+    break;
   default:
     console.log(
-      `Not a valid option. Try again with 'concert-this', 'spotify-this-song','movie-this', or 'do-what-it-says'!`
+      `Not a valid option. Try again with 'concert-this', 'spotify-this-song','movie-this', or 'do-what-it-says'! or 'node liri help'`
     );
     break;
 }
